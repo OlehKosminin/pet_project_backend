@@ -19,10 +19,25 @@ const userSchema = new Schema(
       required: [true, "Email is required"],
       unique: true,
     },
-    subscription: {
+    birthday: {
       type: String,
-      enum: ["starter", "pro", "business"],
-      default: "starter",
+      default: "00.00.0000",
+    },
+    phone: {
+      type: String,
+      default: "+380634567891",
+    },
+    city: {
+      type: String,
+      default: "Kyiv",
+    },
+    name: {
+      type: String,
+      default: "Your name",
+    },
+    avatarUrl: {
+      type: String,
+      default: null,
     },
     token: {
       type: String,
@@ -37,7 +52,6 @@ userSchema.post("save", handleMongooseError);
 const registerSchema = Joi.object({
   password: Joi.string().min(6).required(),
   email: Joi.string().pattern(emailRegexp).required(),
-  subscription: Joi.string().valid("starter", "pro", "business").required(),
 });
 
 const loginSchema = Joi.object({
@@ -45,15 +59,14 @@ const loginSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
 });
 
-const updateSubscriptionSchema = Joi.object({
-  subscription: Joi.string().valid("starter", "pro", "business").required(),
-  // .messages({ message: "missing field favorite" }),
-});
+// const updateSubscriptionSchema = Joi.object({
+//   subscription: Joi.string().valid("starter", "pro", "business").required(),
+// });
 
 const schemas = {
   registerSchema,
   loginSchema,
-  updateSubscriptionSchema,
+  // updateSubscriptionSchema,
 };
 
 const User = model("user", userSchema);

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-// require("dotenv").config();
+require("dotenv").config();
 const app = require("./app");
 
 const { DB_HOST, PORT = 3000 } = process.env;
@@ -17,6 +17,3 @@ mongoose
     console.log(error.message);
     process.exit(1);
   });
-
-// SERG
-// hk1XquAt3UPs5iHU;

@@ -15,12 +15,16 @@ const register = async (req, res) => {
   }
 
   const hashPassword = await bctypt.hash(password, 10);
+  console.log("hashPassword: ", hashPassword);
 
   const result = await User.create({ ...req.body, password: hashPassword });
-
+  const { name, birthday, phone, city } = result;
   res.status(201).json({
     email: result.email,
-    subscription: result.subscription,
+    name,
+    birthday,
+    phone,
+    city,
   });
 };
 
@@ -47,10 +51,13 @@ const login = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-  const { email, subscription } = req.user;
+  const { email, name, birthday, phone, city } = req.user;
   res.json({
-    email,
-    subscription,
+    email: email,
+    name: name,
+    birthday: birthday,
+    phone: phone,
+    city: city,
   });
 };
 
@@ -59,18 +66,31 @@ const logout = async (req, res) => {
   await User.findByIdAndUpdate(_id, { token: "" });
   res.json({
     message: "Logout success",
+    status: 204,
   });
 };
 
-const updateSubscription = async (req, res) => {
-  const { subscription } = req.user;
-  const result = await User.findOneAndUpdate(subscription, req.body, {
-    new: true,
-  });
+const updateUserInfo = async (req, res) => {
+  const { body } = req;
+  const { _id, email } = req.body;
+
+  const result = await User.findOneAndUpdate(_id, { ...body });
+
   if (!result) {
     throw HttpError(404);
   }
-  res.json(result);
+
+  const user = await User.findOne({ email });
+  console.log("user: ", user);
+  const { birthday, phone, city, name } = user;
+  res.json({ birthday, phone, city, name, email });
+};
+
+const getUserInfo = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  const { birthday, phone, city, name } = user;
+  res.json({ birthday, phone, city, name, email });
 };
 
 module.exports = {
@@ -78,5 +98,6 @@ module.exports = {
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
-  updateSubscription: ctrlWrapper(updateSubscription),
+  updateSubscription: ctrlWrapper(updateUserInfo),
+  getUserInfo: ctrlWrapper(getUserInfo),
 };
