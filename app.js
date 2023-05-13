@@ -4,7 +4,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 const authRouter = require("./routes/api/auth-routes");
-const contactsRouter = require("./routes/api/pets-routes");
+const petsRouter = require("./routes/api/pets-routes");
 const notiesRouter = require("./routes/api/noties-routes");
 const newsRouter = require("./routes/api/news-routes");
 const servicesSidebarRouter = require("./routes/api/servicesSidebar-routes");
@@ -18,8 +18,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRouter);
-app.use("/api/contacts", contactsRouter);
-app.use("/api/noties", notiesRouter);
+app.use("/api/pets", petsRouter);
+app.use("/api/pets", notiesRouter);
 app.use("/api/news", newsRouter);
 app.use("/api/services-sidebar", servicesSidebarRouter);
 

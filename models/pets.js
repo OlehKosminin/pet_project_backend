@@ -4,25 +4,44 @@ const Joi = require("joi");
 
 const { handleMongooseError } = require("../utils");
 
-const contactSchema = new Schema(
+const petSchema = new Schema(
   {
     name: {
       type: String,
       required: [true, "The name field must be filled"],
     },
-    email: { type: String, required: [true, "The email field must be filled"] },
-    phone: { type: String, required: [true, "The phone field must be filled"] },
-    favorite: { type: Boolean, default: false },
+    birthday: {
+      type: String,
+      required: [true, "The birthday field must be filled"],
+    },
+    breed: { type: String, required: [true, "The breed field must be filled"] },
+    place: { type: String, required: [true, "The place field must be filled"] },
+    sex: { type: String, required: [true, "The sex field must be filled"] },
+    comments: {
+      type: String,
+      required: [true, "The comments field must be filled"],
+    },
+
+    title: { type: String, required: [true, "The title field must be filled"] },
+    category: {
+      type: String,
+      default: "sell",
+    },
     owner: {
       type: Schema.Types.ObjectId,
-      ref: "user",
+      ref: "pets",
       required: true,
     },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+    photoURL: { type: String, default: null },
   },
   { versionKey: false }
 );
 
-contactSchema.post("save", handleMongooseError);
+petSchema.post("save", handleMongooseError);
 
 const addSchema = Joi.object({
   name: Joi.string().required().messages({
@@ -70,6 +89,6 @@ const schemas = {
   updateFavoriteSchema,
 };
 
-const Contact = model("contact", contactSchema);
+const Pet = model("pet", petSchema);
 
-module.exports = { Contact, schemas };
+module.exports = { Pet, schemas };
