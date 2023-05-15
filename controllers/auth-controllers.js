@@ -17,7 +17,10 @@ const register = async (req, res) => {
   const hashPassword = await bctypt.hash(password, 10);
   console.log("hashPassword: ", hashPassword);
 
-  const result = await User.create({ ...req.body, password: hashPassword });
+  const result = await User.create({
+    ...req.body,
+    password: hashPassword,
+  });
   const { name, birthday, phone, city } = result;
   res.status(201).json({
     email: result.email,
@@ -31,6 +34,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
+  console.log("user: ", user);
   if (!user) {
     throw HttpError(401, "Invalid email or password");
   }
@@ -93,6 +97,32 @@ const getUserInfo = async (req, res) => {
   res.json({ birthday, phone, city, name, email });
 };
 
+// const userAddPhoto = async (req, res) => {
+//   const owner = req.user.id;
+//   const petData = req.body;
+//   const data = !req.file
+//     ? { avatarURL: req.file.path, owner, ...petData }
+//     : { owner, ...petData };
+
+//   User.create(data)
+//     .then((pet) => {
+//       if (pet) {
+//         User.findByIdAndUpdate(owner, { $push: { userAvatar: pet._id } })
+//           .then((user) => {
+//             if (user) {
+//               res.status(201).json({ success: true, pet });
+//             }
+//           })
+//           .catch((err) => {
+//             throw new Error(err);
+//           });
+//       }
+//     })
+//     .catch((err) =>
+//       res.status(400).json({ success: false, error: err, message: err.message })
+//     );
+// };
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
@@ -100,4 +130,5 @@ module.exports = {
   logout: ctrlWrapper(logout),
   updateSubscription: ctrlWrapper(updateUserInfo),
   getUserInfo: ctrlWrapper(getUserInfo),
+  // userAddPhoto: ctrlWrapper(userAddPhoto),
 };

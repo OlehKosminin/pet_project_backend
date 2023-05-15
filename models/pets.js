@@ -15,14 +15,10 @@ const petSchema = new Schema(
       required: [true, "The birthday field must be filled"],
     },
     breed: { type: String, required: [true, "The breed field must be filled"] },
-    place: { type: String, required: [true, "The place field must be filled"] },
-    sex: { type: String, required: [true, "The sex field must be filled"] },
     comments: {
       type: String,
       required: [true, "The comments field must be filled"],
     },
-
-    title: { type: String, required: [true, "The title field must be filled"] },
     category: {
       type: String,
       default: "sell",
@@ -31,10 +27,6 @@ const petSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "pets",
       required: true,
-    },
-    favorite: {
-      type: Boolean,
-      default: false,
     },
     photoURL: { type: String, default: null },
   },
@@ -49,16 +41,37 @@ const addSchema = Joi.object({
     "string.empty": '"name" cannot be empty',
     "string.base": '"name" must be string',
   }),
-  email: Joi.string().required().messages({
-    "any.required": '"email" is required',
-    "string.empty": '"email" cannot be empty',
-    "string.base": '"email" must be string',
+  birthday: Joi.string().required().messages({
+    "any.required": '"birthday" is required',
+    "string.empty": '"birthday" cannot be empty',
+    "string.base": '"birthday" must be string',
   }),
-  phone: Joi.string().required().messages({
-    "any.required": '"phone" is required',
-    "string.empty": '"phone" cannot be empty',
-    "string.base": '"phone" must be string',
+  breed: Joi.string().required().messages({
+    "any.required": '"breed" is required',
+    "string.empty": '"breed" cannot be empty',
+    "string.base": '"breed" must be string',
   }),
+  comments: Joi.string().required().messages({
+    "any.required": '"comments" is required',
+    "string.empty": '"comments" cannot be empty',
+    "string.base": '"comments" must be string',
+  }),
+  category: Joi.string().required().messages({
+    "any.required": '"category" is required',
+    "string.empty": '"category" cannot be empty',
+    "string.base": '"category" must be string',
+  }),
+  owner: Joi.string().required().messages({
+    "any.required": '"owner" is required',
+    "string.empty": '"owner" cannot be empty',
+    "string.base": '"owner" must be string',
+  }),
+  photoURL: Joi.string().required().messages({
+    "any.required": '"photoURL" is required',
+    "string.empty": '"photoURL" cannot be empty',
+    "string.base": '"photoURL" must be string',
+  }),
+
   favorite: Joi.boolean(),
 });
 
@@ -71,11 +84,6 @@ const addSchemaPut = Joi.object({
     "string.empty": '"email" cannot be empty',
     "string.base": '"email" must be string',
   }),
-  phone: Joi.string().messages({
-    "string.empty": '"phone" cannot be empty',
-    "string.base": '"phone" must be string',
-  }),
-  favorite: Joi.boolean(),
 });
 
 const updateFavoriteSchema = Joi.object({
