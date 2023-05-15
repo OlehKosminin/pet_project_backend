@@ -1,6 +1,6 @@
 // const { HttpError } = require("../helpers");
 
-const { Contact } = require("../models/pets");
+const { Notices } = require("../models/notices");
 const { ctrlWrapper } = require("../utils");
 
 const getAllContacts = async (req, res) => {
@@ -11,7 +11,7 @@ const getAllContacts = async (req, res) => {
   if (favorite) {
     query.favorite = favorite;
   }
-  const result = await Contact.find(query, "", {
+  const result = await Notices.find(query, "", {
     skip,
     limit,
   }).populate("owner", "email");
