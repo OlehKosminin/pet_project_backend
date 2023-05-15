@@ -1,76 +1,53 @@
-// const { HttpError } = require("../helpers");
-
+const { HttpError } = require("../helpers");
+const cloudinary = require("cloudinary").v2;
 const { Pet } = require("../models/pets");
+const { User } = require("../models/user");
 const { ctrlWrapper } = require("../utils");
 
-// const getAllPetsByOwner = async (req, res) => {
-//   const { _id: owner } = req.user;
-//   console.log("owner: ", owner);
-//   const { page = 1, limit = 20, favorite } = req.query;
-//   const skip = (page - 1) * limit;
-//   const query = { owner };
-//   if (favorite) {
-//     query.favorite = favorite;
-//   }
-//   const result = await Contact.find(query, "", {
-//     skip,
-//     limit,
-//   }).populate("owner");
-//   res.json(result);
-// };
+const petUserAdd = async (req, res) => {
+  const owner = req.user.id;
+  const petData = req.body;
 
-// const getContactById = async (req, res) => {
-//   const { contactId } = req.params;
-//   const result = await Contact.findById(contactId);
-//   if (!result) {
-//     throw HttpError(404, `Contact whith id: ${contactId} not found`);
-//   }
-//   res.json(result);
-// };
+  const photoURL = req.file.path;
+  const data = !req.file
+    ? { photoURL, owner, ...petData }
+    : { owner, ...petData, photoURL };
+  console.log("data: ", data);
 
-const addPet = async (req, res) => {
-  const { _id: owner } = req.user;
-  console.log("owner: ", owner);
-  const result = await Pet.create({ ...req.body, owner });
-  res.status(201).json(result);
+  Pet.create(data)
+    .then((pet) => {
+      if (pet) {
+        User.findByIdAndUpdate(owner, photoURL, {
+          $push: { userPets: pet._id },
+        })
+          .then((user) => {
+            if (user) {
+              res.status(201).json({ success: true, pet });
+            }
+          })
+          .catch((err) => {
+            throw new Error(err);
+          });
+      }
+    })
+    .catch((err) =>
+      res.status(400).json({ success: false, error: err, message: err.message })
+    );
+};
+const removePet = async (req, res) => {
+  const { petId } = req.params;
+
+  const result = await Pet.findByIdAndDelete(petId);
+  if (result) {
+    cloudinary.api.delete_resources(["v1684148506/sqnhtt49unw2ubvy4oom"]);
+  }
+  if (!result) {
+    throw HttpError(404, `Contact whith id: ${petId} not found`);
+  }
+  res.json({ message: "Delete success" });
 };
 
-// const removeContact = async (req, res) => {
-//   const { contactId } = req.params;
-//   const result = await Contact.findByIdAndDelete(contactId);
-//   if (!result) {
-//     throw HttpError(404, `Contact whith id: ${contactId} not found`);
-//   }
-//   res.json({ message: "Delete success" });
-// };
-
-// const changeContact = async (req, res) => {
-//   const { contactId } = req.params;
-//   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
-//     new: true,
-//   });
-//   if (!result) {
-//     throw HttpError(404, `Contact whith id: ${contactId} not found`);
-//   }
-//   res.json(result);
-// };
-
-// const updateFavorite = async (req, res) => {
-//   const { contactId } = req.params;
-//   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
-//     new: true,
-//   });
-//   if (!result) {
-//     throw HttpError(404, `Contact whith id: ${contactId} not found`);
-//   }
-//   res.json(result);
-// };
-
 module.exports = {
-  // getAllPetsByOwner: ctrlWrapper(getAllPetsByOwner),
-  // getContactById: ctrlWrapper(getContactById),
-  addPet: ctrlWrapper(addPet),
-  // removeContact: ctrlWrapper(removeContact),
-  // changeContact: ctrlWrapper(changeContact),
-  // updateFavorite: ctrlWrapper(updateFavorite),
+  petUserAdd: ctrlWrapper(petUserAdd),
+  removePet: ctrlWrapper(removePet),
 };

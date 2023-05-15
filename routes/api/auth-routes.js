@@ -22,4 +22,13 @@ router.patch("/users", authenticate, ctrl.updateSubscription);
 
 router.get("/user-info", authenticate, ctrl.getUserInfo);
 
+// router.post("/", authenticate, uploadCloud.single("image"), ctrl.userAddPhoto);
+
+// router.patch(
+//   "update-avatar",
+//   authenticate,
+//   upload.single("avatarURL"),
+//   ctrl.updateAvatar
+// );
+
 module.exports = router;
