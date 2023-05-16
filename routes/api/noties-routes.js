@@ -14,6 +14,6 @@ const { authenticate } = require("../../middlewares");
 
 router.post("/", authenticate, ImageService.upload("image"), ctrl.createNotice);
 
-router.get("/", authenticate, ctrl.getAllContacts);
+router.get("/category", authenticate, ctrl.getCategoryNotices);
 
 module.exports = router;

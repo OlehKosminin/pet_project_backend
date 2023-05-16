@@ -3,7 +3,7 @@ const { model, Schema } = require("mongoose");
 const noticesSchema = new Schema({
   title: {
     type: String,
-    default: null,
+    required: [true, "Set title for notices"],
   },
   name: {
     type: String,
@@ -24,7 +24,7 @@ const noticesSchema = new Schema({
   },
   category: {
     type: String,
-    enum: ["your pet", "sell", "in good hands", "lost/found"],
+    enum: ["sell", "in good hands", "lost/found"],
     default: "sell",
   },
   comments: {
@@ -34,6 +34,18 @@ const noticesSchema = new Schema({
   photoUrl: {
     type: String,
     default: null,
+  },
+  location: {
+    type: String,
+    required: [true, "The location field must be filled"],
+  },
+  price: {
+    type: Number,
+    default: null,
+  },
+  favorite: {
+    type: Array,
+    default: [],
   },
   owner: {
     type: Schema.Types.ObjectId,

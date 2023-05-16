@@ -21,21 +21,21 @@ const createNotice = async (req, res) => {
   res.status(200).json({ notice: noticesNew });
 };
 
-const getAllContacts = async (req, res) => {
-  const { _id: owner } = req.user;
-  const { page = 1, limit = 20, favorite } = req.query;
+const getCategoryNotices = async (req, res) => {
+  const { page = 1, limit = 12, category } = req.query;
   const skip = (page - 1) * limit;
-  const query = { owner };
-  if (favorite) {
-    query.favorite = favorite;
-  }
-  const result = await Notices.find(query, "", {
-    skip,
-    limit,
-  }).populate("owner", "email");
-  res.json(result);
+
+  const result = await Notices.find(category)
+    .skip(skip)
+    .limit(limit)
+    .toArray((err, results) => {
+      if (err) return console.error("Помилка запиту до бази даних:", err);
+    });
+
+  res.status(200).json({ result });
 };
+
 module.exports = {
-  getAllContacts: ctrlWrapper(getAllContacts),
+  getCategoryNotices: ctrlWrapper(getCategoryNotices),
   createNotice: ctrlWrapper(createNotice),
 };
