@@ -76,16 +76,19 @@ const logout = async (req, res) => {
 
 const updateUserInfo = async (req, res) => {
   const { body } = req;
-  const { _id, email } = req.body;
 
-  const result = await User.findOneAndUpdate(_id, { ...body });
+  const { _id, email } = req.body;
+  const avatarUrl = req.file.path;
+  const publicId = req.file.filename;
+  const options =
+    !avatarUrl || !publicId ? { ...body, publicId, avatarUrl } : { ...body };
+  const result = await User.findOneAndUpdate(_id, { options });
 
   if (!result) {
     throw HttpError(404);
   }
 
   const user = await User.findOne({ email });
-  console.log("user: ", user);
   const { birthday, phone, city, name } = user;
   res.json({ birthday, phone, city, name, email });
 };
@@ -98,29 +101,16 @@ const getUserInfo = async (req, res) => {
 };
 
 // const userAddPhoto = async (req, res) => {
-//   const owner = req.user.id;
-//   const petData = req.body;
-//   const data = !req.file
-//     ? { avatarURL: req.file.path, owner, ...petData }
-//     : { owner, ...petData };
-
-//   User.create(data)
-//     .then((pet) => {
-//       if (pet) {
-//         User.findByIdAndUpdate(owner, { $push: { userAvatar: pet._id } })
-//           .then((user) => {
-//             if (user) {
-//               res.status(201).json({ success: true, pet });
-//             }
-//           })
-//           .catch((err) => {
-//             throw new Error(err);
-//           });
-//       }
-//     })
-//     .catch((err) =>
-//       res.status(400).json({ success: false, error: err, message: err.message })
-//     );
+//   console.log("req: ", req);
+// const owner = req.user.id;
+// console.log("owner: ", owner);
+// const userData = req.file;
+// console.log("userData: ", userData);
+// const data = !req.file
+//   ? { avatarURL: req.file.path, owner, ...userData }
+//   : { owner, ...userData };
+//   res.json();
+//   User.findByIdAndUpdate();
 // };
 
 module.exports = {

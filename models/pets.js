@@ -21,13 +21,14 @@ const petSchema = new Schema(
     },
     category: {
       type: String,
-      default: "sell",
+      default: "your pet",
     },
     owner: {
       type: Schema.Types.ObjectId,
       ref: "pets",
       required: true,
     },
+    publicId: { type: String, default: "" },
     photoURL: { type: String, default: null },
   },
   { versionKey: false }
@@ -70,6 +71,11 @@ const addSchema = Joi.object({
     "any.required": '"photoURL" is required',
     "string.empty": '"photoURL" cannot be empty',
     "string.base": '"photoURL" must be string',
+  }),
+  publicId: Joi.string().required().messages({
+    "any.required": '"publicId" is required',
+    "string.empty": '"publicId" cannot be empty',
+    "string.base": '"publicId" must be string',
   }),
 
   favorite: Joi.boolean(),

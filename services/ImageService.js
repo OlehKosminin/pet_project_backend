@@ -24,7 +24,7 @@ class ImageService {
 
   static async save(file, options, ...pathSegments) {
     return await sharp(file.buffer)
-      .resize(options || { height: 161, width: 161 })
+      .resize(options || { height: 288, width: 288 })
       .toFormat("webp")
       .webp({ quality: 85 });
   }

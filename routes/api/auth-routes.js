@@ -2,7 +2,7 @@ const express = require("express");
 
 const { validateBody } = require("../../utils");
 
-const { authenticate } = require("../../middlewares");
+const { authenticate, uploadCloudAvatars } = require("../../middlewares");
 
 const { schemas } = require("../../models/user");
 
@@ -18,11 +18,21 @@ router.get("/current", authenticate, ctrl.getCurrent);
 
 router.post("/logout", authenticate, ctrl.logout);
 
-router.patch("/users", authenticate, ctrl.updateSubscription);
+router.patch(
+  "/users",
+  authenticate,
+  uploadCloudAvatars.single("avatarUrl"),
+  ctrl.updateSubscription
+);
 
 router.get("/user-info", authenticate, ctrl.getUserInfo);
 
-// router.post("/", authenticate, uploadCloud.single("image"), ctrl.userAddPhoto);
+// router.post(
+//   "/",
+//   authenticate,
+//   uploadCloudAvatars.single("avatarUrl"),
+//   ctrl.userAddPhoto
+// );
 
 // router.patch(
 //   "update-avatar",
