@@ -12,4 +12,6 @@ router.post("/", authenticate, uploadCloud.single("photoURL"), ctrl.petUserAdd);
 
 router.delete("/:petId", authenticate, isValidId, ctrl.removePet);
 
+router.get("/my-pets", authenticate, ctrl.getMyAllPets);
+
 module.exports = router;

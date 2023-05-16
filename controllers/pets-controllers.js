@@ -6,13 +6,15 @@ const { ctrlWrapper } = require("../utils");
 
 const petUserAdd = async (req, res) => {
   const owner = req.user.id;
+  console.log("owner: ", owner);
   const petData = req.body;
+  console.log("petData: ", petData);
 
   const photoURL = req.file.path;
   const publicId = req.file.filename;
   console.log("publicId: ", publicId);
   const data = !req.file
-    ? { ...petData, photoURL, owner, publicId }
+    ? { ...petData, owner }
     : { ...petData, owner, photoURL, publicId };
 
   Pet.create(data)
@@ -54,7 +56,16 @@ const removePet = async (req, res) => {
   res.json({ message: "Delete success" });
 };
 
+const getMyAllPets = async (req, res) => {
+  const { _id } = req.user;
+  console.log("_id: ", _id);
+
+  const result = await Pet.find({ owner: _id });
+  res.json(result);
+};
+
 module.exports = {
   petUserAdd: ctrlWrapper(petUserAdd),
   removePet: ctrlWrapper(removePet),
+  getMyAllPets: ctrlWrapper(getMyAllPets),
 };
