@@ -20,7 +20,7 @@ app.use(express.static("public"));
 
 app.use("/api/auth", authRouter);
 app.use("/api/user-pets", petsRouter);
-app.use("/api/pets", notiesRouter);
+app.use("/api/notices", notiesRouter);
 app.use("/api/news", newsRouter);
 app.use("/api/services-sidebar", servicesSidebarRouter);
 
