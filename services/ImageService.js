@@ -11,9 +11,10 @@ cloudinary.config({
 
 const cloudinaryStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  params: (req, file) => ({
+  params: (req) => ({
     folder: `notices-img/${req.user.id}`,
     format: "webp",
+    transformation: [{ width: 400, height: 300, crop: "fill" }],
     overwrite: true,
     quality: 85,
   }),
@@ -26,12 +27,11 @@ class ImageService {
     return upload.single(name);
   }
 
-  static async save(file, options) {
+  static async save(file) {
     // Завантажуємо зображення до Cloudinary
     const nameImg = uuid();
     const result = await cloudinary.uploader.upload(file.path, {
       public_id: nameImg,
-      transformation: [{ width: 500, height: 500, crop: "fill", ...options }],
     });
     return result.secure_url;
   }
