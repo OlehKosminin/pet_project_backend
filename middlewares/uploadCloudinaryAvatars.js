@@ -11,16 +11,17 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "user-pets",
-    format: async (req, file) => {},
+    folder: "user-avatars",
+    format: async (req, file) => {
+      console.log("file: ", file);
+    },
   },
   allowedFormats: ["jpg", "png", "webp"],
   filename: (req, file, cb) => {
-    console.log("file.originalname: ", file.originalname);
     cb(null, file.originalname);
   },
 });
 
-const uploadCloud = multer({ storage });
+const uploadCloudAvatars = multer({ storage });
 
-module.exports = uploadCloud;
+module.exports = uploadCloudAvatars;

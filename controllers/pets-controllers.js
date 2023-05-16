@@ -9,10 +9,11 @@ const petUserAdd = async (req, res) => {
   const petData = req.body;
 
   const photoURL = req.file.path;
+  const publicId = req.file.filename;
+  console.log("publicId: ", publicId);
   const data = !req.file
-    ? { photoURL, owner, ...petData }
-    : { owner, ...petData, photoURL };
-  console.log("data: ", data);
+    ? { ...petData, photoURL, owner, publicId }
+    : { ...petData, owner, photoURL, publicId };
 
   Pet.create(data)
     .then((pet) => {
@@ -36,10 +37,16 @@ const petUserAdd = async (req, res) => {
 };
 const removePet = async (req, res) => {
   const { petId } = req.params;
+  const { publicId } = await Pet.findById(petId);
 
   const result = await Pet.findByIdAndDelete(petId);
   if (result) {
-    cloudinary.api.delete_resources(["v1684148506/sqnhtt49unw2ubvy4oom"]);
+    await cloudinary.api
+      .delete_resources([publicId], {
+        type: "upload",
+        resource_type: "image",
+      })
+      .then(console.log);
   }
   if (!result) {
     throw HttpError(404, `Contact whith id: ${petId} not found`);
