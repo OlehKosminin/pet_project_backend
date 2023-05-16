@@ -12,9 +12,7 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: "user-avatars",
-    format: async (req, file) => {
-      console.log("file: ", file);
-    },
+    format: async (req, file) => {},
   },
   allowedFormats: ["jpg", "png", "webp"],
   filename: (req, file, cb) => {

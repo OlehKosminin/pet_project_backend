@@ -15,19 +15,27 @@ const register = async (req, res) => {
   }
 
   const hashPassword = await bctypt.hash(password, 10);
-  console.log("hashPassword: ", hashPassword);
 
   const result = await User.create({
     ...req.body,
     password: hashPassword,
   });
   const { name, birthday, phone, city } = result;
+  const userForAddToken = await User.findOne({ email });
+  console.log("userForAddToken._id: ", userForAddToken._id);
+  const payload = {
+    id: userForAddToken._id,
+  };
+  const token = jwt.sign({ payload }, SECRET_KEY, { expiresIn: "23h" });
+  await User.findByIdAndUpdate(userForAddToken._id, { token });
+
   res.status(201).json({
     email: result.email,
     name,
     birthday,
     phone,
     city,
+    token,
   });
 };
 
@@ -76,42 +84,31 @@ const logout = async (req, res) => {
 
 const updateUserInfo = async (req, res) => {
   const { body } = req;
+  console.log("body: ", body);
 
   const { _id, email } = req.body;
   const avatarUrl = req.file.path;
   const publicId = req.file.filename;
-  const options =
-    !avatarUrl || !publicId ? { ...body, publicId, avatarUrl } : { ...body };
-  const result = await User.findOneAndUpdate(_id, { options });
+  const options = !avatarUrl ? { ...body } : { ...body, publicId, avatarUrl };
+  const result = await User.findOneAndUpdate(_id, { ...options });
 
   if (!result) {
     throw HttpError(404);
   }
 
   const user = await User.findOne({ email });
-  const { birthday, phone, city, name } = user;
-  res.json({ birthday, phone, city, name, email });
+
+  res.json(user);
 };
 
 const getUserInfo = async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
-  const { birthday, phone, city, name } = user;
-  res.json({ birthday, phone, city, name, email });
+  if (!user) {
+    throw HttpError(404);
+  }
+  res.json(user);
 };
-
-// const userAddPhoto = async (req, res) => {
-//   console.log("req: ", req);
-// const owner = req.user.id;
-// console.log("owner: ", owner);
-// const userData = req.file;
-// console.log("userData: ", userData);
-// const data = !req.file
-//   ? { avatarURL: req.file.path, owner, ...userData }
-//   : { owner, ...userData };
-//   res.json();
-//   User.findByIdAndUpdate();
-// };
 
 module.exports = {
   register: ctrlWrapper(register),
@@ -120,5 +117,4 @@ module.exports = {
   logout: ctrlWrapper(logout),
   updateSubscription: ctrlWrapper(updateUserInfo),
   getUserInfo: ctrlWrapper(getUserInfo),
-  // userAddPhoto: ctrlWrapper(userAddPhoto),
 };
