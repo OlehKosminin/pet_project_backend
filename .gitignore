@@ -1,1 +1,8 @@
+<<<<<<< HEAD
 node_modules
+=======
+node_modules/
+.env
+.idea
+.vscode
+>>>>>>> 50d155093dd13d35231cc36ad9e906a636f5f8e5
