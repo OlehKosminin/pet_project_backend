@@ -1,7 +1,17 @@
-// const { HttpError } = require("../helpers");
+const { HttpError } = require("../helpers");
 
 const { Notices } = require("../models/notices");
 const { ctrlWrapper } = require("../utils");
+const { save } = require("../services/ImageService");
+const { json } = require("express");
+
+const createNotice = async (req, res) => {
+  const { file } = req;
+  if (!file) throw HttpError(404, "The image was not uploaded");
+  const imageUrl = await save(req.file, { width: 400, height: 300 });
+
+  res.status(200, json({ imgUrl: imageUrl }));
+};
 
 const getAllContacts = async (req, res) => {
   const { _id: owner } = req.user;
@@ -19,4 +29,5 @@ const getAllContacts = async (req, res) => {
 };
 module.exports = {
   getAllContacts: ctrlWrapper(getAllContacts),
+  createNotice: ctrlWrapper(createNotice),
 };

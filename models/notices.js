@@ -1,6 +1,6 @@
 const { model, Schema } = require("mongoose");
 
-const userSchema = new Schema({
+const noticesSchema = new Schema({
   title: {
     type: String,
     required: [true, "Set title for notices"],
@@ -41,6 +41,6 @@ const userSchema = new Schema({
   },
 });
 
-const Notices = model("notices", userSchema);
+const Notices = model("notices", noticesSchema);
 
 module.exports = Notices;
