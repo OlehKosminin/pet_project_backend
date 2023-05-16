@@ -1,7 +1,6 @@
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
-const sharp = require("sharp");
 const uuid = require("uuid").v4;
 
 cloudinary.config({
@@ -13,9 +12,8 @@ cloudinary.config({
 const cloudinaryStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: (req, file) => ({
-    folder: `images/${req.user.id}`,
+    folder: `notices-img/${req.user.id}`,
     format: "webp",
-    public_id: (req, file) => uuid(),
     overwrite: true,
     quality: 85,
   }),
@@ -28,16 +26,13 @@ class ImageService {
     return upload.single(name);
   }
 
-
-  static async save(file, options, userId) {
-    // Обрізаємо та зменшуємо розмір зображення
-    const imageBuffer = await sharp(file.buffer)
-      .resize(options || { height: 500, width: 500 })
-      .toFormat("webp")
-      .toBuffer();
-
+  static async save(file, options) {
     // Завантажуємо зображення до Cloudinary
-    const result = await cloudinary.uploader.upload(imageBuffer);
+    const nameImg = uuid();
+    const result = await cloudinary.uploader.upload(file.path, {
+      public_id: nameImg,
+      transformation: [{ width: 500, height: 500, crop: "fill", ...options }],
+    });
     return result.secure_url;
   }
 }

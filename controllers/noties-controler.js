@@ -1,16 +1,24 @@
 const { HttpError } = require("../helpers");
 
-const { Notices } = require("../models/notices");
 const { ctrlWrapper } = require("../utils");
 const { save } = require("../services/ImageService");
-const { json } = require("express");
+const Notices = require("../models/notices");
 
 const createNotice = async (req, res) => {
   const { file } = req;
   if (!file) throw HttpError(404, "The image was not uploaded");
-  const imageUrl = await save(req.file, { width: 400, height: 300 });
+  const imageUrl = await save(req.file, { height: 300, width: 400 });
 
-  res.status(200, json({ imgUrl: imageUrl }));
+  console.log(req.body);
+  console.log(imageUrl);
+
+  const noticesNew = await Notices.create({
+    photoUrl: imageUrl,
+    ...req.body,
+    owner: req.user,
+  });
+
+  res.status(200).json({ notice: noticesNew });
 };
 
 const getAllContacts = async (req, res) => {

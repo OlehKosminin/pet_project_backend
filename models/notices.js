@@ -3,7 +3,7 @@ const { model, Schema } = require("mongoose");
 const noticesSchema = new Schema({
   title: {
     type: String,
-    required: [true, "Set title for notices"],
+    default: null,
   },
   name: {
     type: String,
