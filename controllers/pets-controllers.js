@@ -58,7 +58,6 @@ const removePet = async (req, res) => {
 
 const getMyAllPets = async (req, res) => {
   const { _id } = req.user;
-  console.log("_id: ", _id);
 
   const result = await Pet.find({ owner: _id });
   res.json(result);
