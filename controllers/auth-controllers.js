@@ -20,14 +20,8 @@ const register = async (req, res) => {
     ...req.body,
     password: hashPassword,
   });
+
   const { name, birthday, phone, city } = result;
-  const userForAddToken = await User.findOne({ email });
-  console.log("userForAddToken._id: ", userForAddToken._id);
-  const payload = {
-    id: userForAddToken._id,
-  };
-  const token = jwt.sign({ payload }, SECRET_KEY, { expiresIn: "23h" });
-  await User.findByIdAndUpdate(userForAddToken._id, { token });
 
   res.status(201).json({
     email: result.email,
@@ -35,7 +29,6 @@ const register = async (req, res) => {
     birthday,
     phone,
     city,
-    token,
   });
 };
 
