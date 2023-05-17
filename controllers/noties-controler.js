@@ -1,7 +1,7 @@
 const { HttpError } = require("../helpers");
 
 const { ctrlWrapper } = require("../utils");
-const { ImageService } = require("../services/ImageService");
+const { ImageService, cloudinary } = require("../services/ImageService");
 const { Notices } = require("../models/notices");
 
 const createNotice = async (req, res) => {
@@ -60,6 +60,15 @@ const deleteNoticesById = async (req, res) => {
   const result = await Notices.findOneAndDelete({
     _id: noticeId,
     owner: req.user,
+  });
+
+  cloudinary.uploader.destroy(result.public_id, (error, result) => {
+    if (error)
+      throw HttpError(
+        400,
+        `Error while deleting a photo from Cloudinary: ${error}`
+      );
+    console.log("Фото успішно видалено з Cloudinary:", result);
   });
 
   if (!result)
