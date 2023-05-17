@@ -14,6 +14,7 @@ const cloudinaryStorage = new CloudinaryStorage({
   params: (req) => ({
     folder: `notices-img/${req.user.id}`,
     format: "webp",
+    public_id: uuid(),
     transformation: [{ width: 400, height: 300, crop: "fill" }],
     overwrite: true,
     quality: 85,
@@ -29,12 +30,9 @@ class ImageService {
 
   static async save(file) {
     // Завантажуємо зображення до Cloudinary
-    const nameImg = uuid();
-    const result = await cloudinary.uploader.upload(file.path, {
-      public_id: nameImg,
-    });
+    const result = await cloudinary.uploader.upload(file.path);
     return result.secure_url;
   }
 }
 
-module.exports = ImageService;
+module.exports = { ImageService, cloudinary };
