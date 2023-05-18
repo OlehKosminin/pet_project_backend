@@ -16,11 +16,10 @@ const register = async (req, res) => {
 
   const hashPassword = await bctypt.hash(password, 10);
 
-  const result = await User.create({
+  await User.create({
     ...req.body,
     password: hashPassword,
   });
-
 
   const userForToken = await User.findOne({ email });
   const payload = {
@@ -28,18 +27,10 @@ const register = async (req, res) => {
   };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-  await User.findByIdAndUpdate(userForToken._id, { token });
-
-  const { name, birthday, phone, city } = result;
-
+  const data = await User.findByIdAndUpdate(userForToken._id, { token });
 
   res.status(201).json({
-    email: result.email,
-    name: result.name,
-    birthday,
-    phone,
-    city,
-    token,
+    data,
   });
 };
 
