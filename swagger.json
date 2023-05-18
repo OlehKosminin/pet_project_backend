@@ -1,0 +1,585 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Your pets",
+    "description": "Опис вашого API",
+    "version": "1.0.0"
+  },
+  "host": "https://pet-project-backend.onrender.com",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Notices",
+      "description": "Work with notices"
+    },
+    {
+      "name": "Категорія 2",
+      "description": "Опис категорії 2"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/category": {
+      "get": {
+        "tags": ["Notices"],
+        "description": "Get array notices sort by category",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "type": "number"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "number"
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "_id": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "title": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "name": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "birthday": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "breed": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "sex": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "category": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "comments": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "photoUrl": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "location": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "price": {
+                    "type": "number",
+                    "format": "text"
+                  },
+                  "favorite": {
+                    "type": "array",
+                    "items": []
+                  }
+                }
+              }
+
+            }
+          }
+        }
+      }
+    },
+    "/favorite": {
+      "get": {
+        "tags": ["Notices"],
+        "description": "Get array notices added in favorite by user",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "number"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "_id": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "title": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "name": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "birthday": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "breed": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "sex": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "category": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "comments": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "photoUrl": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "location": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "price": {
+                    "type": "number",
+                    "format": "text"
+                  },
+                  "favorite": {
+                    "type": "array",
+                    "items": []
+                  }
+                }
+              }
+
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "post": {
+        "tags": ["Notices"],
+        "description": "Create new notice",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "title",
+            "in": "body",
+            "schema": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 80
+            },
+            "required": true
+          },
+          {
+            "name": "image",
+            "in": "formData",
+            "type": "file",
+            "required": true
+          },
+          {
+            "name": "name",
+            "in": "body",
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 20
+            },
+            "required": true
+          },
+          {
+            "name": "birthday",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "breed",
+            "in": "body",
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 20
+            },
+            "required": true
+          },
+          {
+            "name": "sex",
+            "in": "formData",
+            "type": "string",
+            "enum": ["male", "female", "unknown"],
+            "required": true
+          },
+          {
+            "name": "category",
+            "in": "formData",
+            "type": "string",
+            "enum": ["sell", "in good hands", "lost/found"],
+            "required": true
+          },
+          {
+            "name": "comments",
+            "in": "body",
+            "schema": {
+              "type": "string",
+              "minLength": 20,
+              "maxLength": 500
+            },
+            "required": true
+          },
+          {
+            "name": "location",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "price",
+            "in": "formData",
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "format": "text"
+                    },
+                    "title": {
+                      "type": "string",
+                      "format": "text"
+                    },
+                    "name": {
+                      "type": "string",
+                      "format": "text"
+                    },
+                    "birthday": {
+                      "type": "string",
+                      "format": "text"
+                    },
+                    "breed": {
+                      "type": "string",
+                      "format": "text"
+                    },
+                    "sex": {
+                      "type": "string",
+                      "format": "text"
+                    },
+                    "category": {
+                      "type": "string",
+                      "format": "text"
+                    },
+                    "comments": {
+                      "type": "string",
+                      "format": "text"
+                    },
+                    "photoUrl": {
+                      "type": "string",
+                      "format": "text"
+                    },
+                    "location": {
+                      "type": "string",
+                      "format": "text"
+                    },
+                    "price": {
+                      "type": "number",
+                      "format": "text"
+                    },
+                    "favorite": {
+                      "type": "array",
+                      "items": []
+                    }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Notices"],
+        "description": "Get all notices user's created",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "number"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "_id": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "title": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "name": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "birthday": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "breed": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "sex": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "category": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "comments": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "photoUrl": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "location": {
+                    "type": "string",
+                    "format": "text"
+                  },
+                  "price": {
+                    "type": "number",
+                    "format": "text"
+                  },
+                  "favorite": {
+                    "type": "array",
+                    "items": []
+                  }
+                }
+              }
+
+            }
+          }
+        }
+      }
+    },
+    "/{noticeId}": {
+      "delete": {
+        "tags": ["Notices"],
+        "description": "Delete notice by ID",
+        "parameters": [
+          {
+            "name": "noticeId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Notices"],
+        "description": "Get notice by id",
+        "parameters": [
+          {
+            "name": "noticeId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "format": "text"
+                },
+                "title": {
+                  "type": "string",
+                  "format": "text"
+                },
+                "name": {
+                  "type": "string",
+                  "format": "text"
+                },
+                "birthday": {
+                  "type": "string",
+                  "format": "text"
+                },
+                "breed": {
+                  "type": "string",
+                  "format": "text"
+                },
+                "sex": {
+                  "type": "string",
+                  "format": "text"
+                },
+                "category": {
+                  "type": "string",
+                  "format": "text"
+                },
+                "comments": {
+                  "type": "string",
+                  "format": "text"
+                },
+                "photoUrl": {
+                  "type": "string",
+                  "format": "text"
+                },
+                "location": {
+                  "type": "string",
+                  "format": "text"
+                },
+                "price": {
+                  "type": "number",
+                  "format": "text"
+                },
+                "favorite": {
+                  "type": "array",
+                  "items": []
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/favorite-add/{noticeId}": {
+      "patch": {
+        "tags": ["Notices"],
+        "description": "Add notice in favorite",
+        "parameters": [
+          {
+            "name": "noticeId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/favorite-delete/{noticeId}": {
+      "patch": {
+        "tags": ["Notices"],
+        "description": "Delete notice from favorite",
+        "parameters": [
+          {
+            "name": "noticeId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  }
+}
