@@ -9,6 +9,8 @@ const ctrl = require("../../controllers/noties-controler");
 const { authenticate } = require("../../middlewares");
 const { isValidPostNotices } = require("../../middlewares/isValidNotices");
 
+router.get("/category", ctrl.getNoticesByCategoryAndSearch);
+router.get("/favorite", authenticate, ctrl.getNoticesFavorite);
 router.post(
   "/",
   authenticate,
@@ -18,8 +20,12 @@ router.post(
 );
 router.get("/", authenticate, ctrl.getNoticesUser);
 router.delete("/:noticeId", authenticate, ctrl.deleteNoticesById);
-
 router.get("/:noticeId", ctrl.getNoticesById);
-router.get("/category", ctrl.getNoticesByCategory);
+router.patch("/favorite-add/:noticeId", authenticate, ctrl.addNoticesFavorite);
+router.patch(
+  "/favorite-delete/:noticeId",
+  authenticate,
+  ctrl.deletedNoticesFavorite
+);
 
 module.exports = router;
