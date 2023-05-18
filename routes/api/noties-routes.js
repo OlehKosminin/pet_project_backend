@@ -2,18 +2,24 @@ const express = require("express");
 
 const router = express.Router();
 
-const ImageService = require("../../services/ImageService");
+const { ImageService } = require("../../services/ImageService");
 
 const ctrl = require("../../controllers/noties-controler");
 
 const { authenticate } = require("../../middlewares");
-// isValidId,
-// const { validateBody } = require("../../utils");
+const { isValidPostNotices } = require("../../middlewares/isValidNotices");
 
-// const { schemas } = require("../../models/pets");
+router.post(
+  "/",
+  authenticate,
+  ImageService.upload("image"),
+  isValidPostNotices,
+  ctrl.createNotice
+);
+router.get("/", authenticate, ctrl.getNoticesUser);
+router.delete("/:noticeId", authenticate, ctrl.deleteNoticesById);
 
-router.post("/", authenticate, ImageService.upload("image"), ctrl.createNotice);
-
-router.get("/category", authenticate, ctrl.getCategoryNotices);
+router.get("/:noticeId", ctrl.getNoticesById);
+router.get("/category", ctrl.getNoticesByCategory);
 
 module.exports = router;

@@ -21,6 +21,7 @@ const register = async (req, res) => {
     password: hashPassword,
   });
 
+
   const userForToken = await User.findOne({ email });
   const payload = {
     id: userForToken._id,
@@ -31,9 +32,10 @@ const register = async (req, res) => {
 
   const { name, birthday, phone, city } = result;
 
+
   res.status(201).json({
     email: result.email,
-    name,
+    name: result.name,
     birthday,
     phone,
     city,
