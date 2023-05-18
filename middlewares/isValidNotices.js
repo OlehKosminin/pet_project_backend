@@ -9,11 +9,11 @@ const isValidPostNotices = (req, res, next) => {
     cloudinary.uploader.destroy(req.file.filename, (error, result) => {
       if (error) {
         console.error(
-          "Помилка під час видалення фото з Cloudinary:",
+          "Error deleted the photo into Cloudinary:",
           error.message
         );
       } else {
-        console.log("Фото успішно видалено з Cloudinary:", result);
+        console.log("The photo successful deleted into Cloudinary:", result);
       }
     });
 
