@@ -24,6 +24,9 @@
     "multer-storage-cloudinary": "^4.0.0",
     "nanoid": "^3.3.4",
     "sharp": "^0.32.1",
+    "swagger-autogen": "^2.23.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.3",
     "uuid": "^9.0.0"
   },
   "engines": {
