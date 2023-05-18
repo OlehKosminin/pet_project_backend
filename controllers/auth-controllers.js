@@ -21,11 +21,11 @@ const register = async (req, res) => {
     password: hashPassword,
   });
 
-  const { name, birthday, phone, city } = result;
+  const { birthday, phone, city } = result;
 
   res.status(201).json({
     email: result.email,
-    name,
+    name: result.name,
     birthday,
     phone,
     city,
