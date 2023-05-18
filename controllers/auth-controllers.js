@@ -21,6 +21,14 @@ const register = async (req, res) => {
     password: hashPassword,
   });
 
+  const userForToken = await User.findOne({ email });
+  const payload = {
+    id: userForToken._id,
+  };
+
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+  await User.findByIdAndUpdate(userForToken._id, { token });
+
   const { name, birthday, phone, city } = result;
 
   res.status(201).json({
@@ -29,13 +37,13 @@ const register = async (req, res) => {
     birthday,
     phone,
     city,
+    token,
   });
 };
 
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  console.log("user: ", user);
   if (!user) {
     throw HttpError(401, "Invalid email or password");
   }
