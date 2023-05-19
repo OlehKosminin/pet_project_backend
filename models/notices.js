@@ -11,7 +11,7 @@ const noticesSchema = new Schema({
     required: [true, "Set name for notices"],
   },
   birthday: {
-    type: String,
+    type: Number,
     required: [true, "Set birthday for notices"],
   },
   breed: {
@@ -65,7 +65,7 @@ const noticesCreateValidator = (data) =>
     .keys({
       title: Joi.string().min(10).max(80).required(),
       name: Joi.string().min(2).max(20).required(),
-      birthday: Joi.string().required(), // уточняеться...
+      birthday: Joi.number().required(),
       breed: Joi.string().min(2).max(20).required(),
       sex: Joi.string().valid("male", "female", "unknown").default("unknown"),
       category: Joi.string()
