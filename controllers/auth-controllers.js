@@ -31,6 +31,7 @@ const register = async (req, res) => {
 
   res.status(201).json({
     data,
+    token,
   });
 };
 
@@ -50,20 +51,24 @@ const login = async (req, res) => {
   };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-  await User.findByIdAndUpdate(user._id, { token });
+  const result = await User.findByIdAndUpdate(user._id, { token });
+  console.log("result: ", result);
   res.json({
+    result,
     token,
   });
 };
 
 const getCurrent = async (req, res) => {
-  const { email, name, birthday, phone, city } = req.user;
+  const { email, name, birthday, phone, city, avatarUrl, publicId } = req.user;
   res.json({
-    email: email,
-    name: name,
-    birthday: birthday,
-    phone: phone,
-    city: city,
+    email,
+    name,
+    birthday,
+    phone,
+    city,
+    avatarUrl,
+    publicId,
   });
 };
 
