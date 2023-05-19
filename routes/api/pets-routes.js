@@ -8,7 +8,7 @@ const ctrl = require("../../controllers/pets-controllers");
 
 const { authenticate, uploadCloud } = require("../../middlewares");
 
-router.post("/", authenticate, uploadCloud.single("photoURL"), ctrl.petUserAdd);
+router.post("/", authenticate, uploadCloud.single("image"), ctrl.petUserAdd);
 
 router.delete("/:petId", authenticate, isValidId, ctrl.removePet);
 
