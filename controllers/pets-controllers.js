@@ -40,7 +40,6 @@ const petUserAdd = async (req, res) => {
 const removePet = async (req, res) => {
   const { petId } = req.params;
   const { publicId } = await Pet.findById(petId);
-
   const result = await Pet.findByIdAndDelete(petId);
   if (result) {
     await cloudinary.api
