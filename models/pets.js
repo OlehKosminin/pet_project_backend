@@ -67,17 +67,11 @@ const addSchema = Joi.object({
     "string.empty": '"owner" cannot be empty',
     "string.base": '"owner" must be string',
   }),
-  photoURL: Joi.string().required().messages({
+  image: Joi.string().required().messages({
     "any.required": '"photoURL" is required',
     "string.empty": '"photoURL" cannot be empty',
     "string.base": '"photoURL" must be string',
   }),
-  publicId: Joi.string().required().messages({
-    "any.required": '"publicId" is required',
-    "string.empty": '"publicId" cannot be empty',
-    "string.base": '"publicId" must be string',
-  }),
-
   favorite: Joi.boolean(),
 });
 
