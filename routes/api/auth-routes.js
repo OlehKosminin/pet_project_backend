@@ -18,10 +18,10 @@ router.get("/current", authenticate, ctrl.getCurrent);
 
 router.post("/logout", authenticate, ctrl.logout);
 
-router.patch(
+router.post(
   "/user-upd",
   authenticate,
-  uploadCloudAvatars.single("avatarUrl"),
+  uploadCloudAvatars.single("avatar"),
   ctrl.updateSubscription
 );
 
