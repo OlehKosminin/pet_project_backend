@@ -74,21 +74,26 @@ const logout = async (req, res) => {
 
 const updateUserInfo = async (req, res) => {
   const { body } = req;
-  // console.log("body: ", body);
-  console.log("req.file: ", req.file);
+
   const { _id, email } = req.body;
+
   const avatarUrl = req.file.path;
   console.log("avatarUrl: ", avatarUrl);
+
   const publicId = req.file.filename;
+  console.log("publicId: ", publicId);
+
   const options = !avatarUrl ? { ...body } : { ...body, publicId, avatarUrl };
-  console.log("options: ", options);
-  const result = await User.findOneAndUpdate(_id, { ...options });
+
+  const result = await User.findOneAndUpdate({ _id }, { ...options });
+  console.log("result: ", result);
 
   if (!result) {
     throw HttpError(404);
   }
 
   const user = await User.findOne({ email });
+  console.log("user: ", user);
 
   res.json(user);
 };
