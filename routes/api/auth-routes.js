@@ -18,7 +18,7 @@ router.get("/current", authenticate, ctrl.getCurrent);
 
 router.post("/logout", authenticate, ctrl.logout);
 
-router.post(
+router.patch(
   "/user-upd",
   authenticate,
   uploadCloudAvatars.single("avatar"),
