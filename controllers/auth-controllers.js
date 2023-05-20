@@ -74,26 +74,29 @@ const logout = async (req, res) => {
 
 const updateUserInfo = async (req, res) => {
   const { body } = req;
+  console.log("body: ", body);
+
+  const options = !req.file
+    ? {
+        ...body,
+        avatarUrl:
+          "https://res.cloudinary.com/dpzseqln4/image/upload/v1684607125/user-avatars/yjcbinzs0prjdk2k8qnd.png",
+      }
+    : { ...body, publicId: req.file.filename, avatarUrl: req.file.path };
 
   const { _id, email } = req.body;
 
-  const avatarUrl = req.file.path;
-  console.log("avatarUrl: ", avatarUrl);
-
-  const publicId = req.file.filename;
-  console.log("publicId: ", publicId);
-
-  const options = !avatarUrl ? { ...body } : { ...body, publicId, avatarUrl };
-
-  const result = await User.findOneAndUpdate({ _id }, { ...options });
-  console.log("result: ", result);
+  const result = await User.findOneAndUpdate(
+    { _id },
+    { ...options },
+    { new: true }
+  );
 
   if (!result) {
     throw HttpError(404);
   }
 
   const user = await User.findOne({ email });
-  console.log("user: ", user);
 
   res.json(user);
 };
