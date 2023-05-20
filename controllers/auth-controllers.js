@@ -52,7 +52,6 @@ const login = async (req, res) => {
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
   const result = await User.findByIdAndUpdate(user._id, { token });
-  console.log("result: ", result);
   res.json({
     result,
     token,
@@ -60,16 +59,8 @@ const login = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-  const { email, name, birthday, phone, city, avatarUrl, publicId } = req.user;
-  res.json({
-    email,
-    name,
-    birthday,
-    phone,
-    city,
-    avatarUrl,
-    publicId,
-  });
+  const user = req.user;
+  res.json(user);
 };
 
 const logout = async (req, res) => {
@@ -83,12 +74,14 @@ const logout = async (req, res) => {
 
 const updateUserInfo = async (req, res) => {
   const { body } = req;
-  console.log("body: ", body);
-
+  // console.log("body: ", body);
+  console.log("req.file: ", req.file);
   const { _id, email } = req.body;
   const avatarUrl = req.file.path;
+  console.log("avatarUrl: ", avatarUrl);
   const publicId = req.file.filename;
   const options = !avatarUrl ? { ...body } : { ...body, publicId, avatarUrl };
+  console.log("options: ", options);
   const result = await User.findOneAndUpdate(_id, { ...options });
 
   if (!result) {
