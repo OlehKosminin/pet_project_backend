@@ -37,7 +37,7 @@ const getNoticesByCategoryAndSearch = async (req, res) => {
 
   let categoryMod = category;
 
-  if (category.split(" ").length > 1)
+  if (category.split(" ").length === 2)
     categoryMod = category.split(" ").join("/");
 
   const filterOptions = { category: categoryMod };
