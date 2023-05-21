@@ -25,15 +25,68 @@ const createNotice = async (req, res) => {
 };
 
 const getNoticesByCategoryAndSearch = async (req, res) => {
-  const { page = 1, limit = 12, category = "sell", search } = req.query;
+  const {
+    page = 1,
+    limit = 12,
+    category = "sell",
+    search,
+    sex,
+    age,
+  } = req.query;
   const skip = (page - 1) * limit;
 
-  const findOptions = search
-    ? { title: { $regex: search, $options: "i" }, category }
-    : { category };
+  const filterOptions = { category };
 
-  const resultCount = await Notices.count(findOptions);
-  const result = await Notices.find(findOptions).skip(skip).limit(limit);
+  if (search) filterOptions.title = { $regex: search, $options: "i" };
+
+  if (sex) {
+    if (sex !== "male" && sex !== "female" && sex !== "unknown")
+      throw HttpError(
+        400,
+        "You are not passing the /sex/ parameter correctly, enum: [/male/, /female/, /unknown/]"
+      );
+    filterOptions.sex = sex;
+  }
+
+  if (age) {
+    const ageRange = age.split("-");
+    if (ageRange.length === 2) {
+      for (const ageRangeElement of ageRange) {
+        if (ageRangeElement === "")
+          throw HttpError(
+            400,
+            "/age/ must not be NaN, example: /1-2/ or /0.3-1/"
+          );
+      }
+      const minAge = Number(ageRange[0]);
+      const maxAge = Number(ageRange[1]);
+
+      if (!isNaN(minAge) && !isNaN(maxAge) && minAge < maxAge) {
+        const currentDate = new Date(); // Текущая дата
+        const minAgeInMilliseconds = minAge * 365 * 24 * 60 * 60 * 1000; // Минимальный возраст в миллисекундах
+        const maxAgeInMilliseconds = maxAge * 365 * 24 * 60 * 60 * 1000; // Максимальный возраст в миллисекундах
+        const minBirthdateFilter = {
+          $gt: new Date(currentDate - maxAgeInMilliseconds),
+        }; // Фильтр минимальной даты рождения
+        const maxBirthdateFilter = {
+          $lt: new Date(currentDate - minAgeInMilliseconds),
+        }; // Фильтр максимальной даты рождения
+
+        filterOptions.birthday = {
+          ...minBirthdateFilter,
+          ...maxBirthdateFilter,
+        };
+      } else {
+        throw HttpError(
+          400,
+          "You are not passing the /age/ parameter correctly, example: /1-2/ or /0.3-1/"
+        );
+      }
+    }
+  }
+
+  const resultCount = await Notices.count(filterOptions);
+  const result = await Notices.find(filterOptions).skip(skip).limit(limit);
 
   res.status(200).json({ result, resultCount });
 };

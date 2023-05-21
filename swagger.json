@@ -52,6 +52,18 @@
             "name": "search",
             "in": "query",
             "type": "string"
+          },
+          {
+            "name": "sex",
+            "in": "query",
+            "type": "string",
+            "enum": ["male", "female", "unknown"]
+          },
+          {
+            "name": "age",
+            "in": "query",
+            "type": "string",
+            "format": "0.3-1 or 1-2 or 2-3"
           }
         ],
         "responses": {
