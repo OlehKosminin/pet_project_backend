@@ -19,6 +19,8 @@ const register = async (req, res) => {
   await User.create({
     ...req.body,
     password: hashPassword,
+    avatarUrl:
+      "https://res.cloudinary.com/dpzseqln4/image/upload/v1684607125/user-avatars/yjcbinzs0prjdk2k8qnd.png",
   });
 
   const userForToken = await User.findOne({ email });
@@ -79,11 +81,10 @@ const updateUserInfo = async (req, res) => {
   const options = !req.file
     ? {
         ...body,
-        avatarUrl:
-          "https://res.cloudinary.com/dpzseqln4/image/upload/v1684607125/user-avatars/yjcbinzs0prjdk2k8qnd.png",
       }
     : { ...body, publicId: req.file.filename, avatarUrl: req.file.path };
 
+  console.log("options: ", options);
   const { _id, email } = req.body;
 
   const result = await User.findOneAndUpdate(
