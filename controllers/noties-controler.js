@@ -35,7 +35,12 @@ const getNoticesByCategoryAndSearch = async (req, res) => {
   } = req.query;
   const skip = (page - 1) * limit;
 
-  const filterOptions = { category };
+  let categoryMod = category;
+
+  if (category.split(" ").length > 1)
+    categoryMod = category.split(" ").join("/");
+
+  const filterOptions = { category: categoryMod };
 
   if (search) filterOptions.title = { $regex: search, $options: "i" };
 
