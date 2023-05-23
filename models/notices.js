@@ -46,7 +46,7 @@ const noticesSchema = new Schema({
   },
   price: {
     type: Number,
-    default: null,
+    default: 0,
   },
   favorite: {
     type: Array,
@@ -63,17 +63,17 @@ const Notices = model("notices", noticesSchema);
 const noticesCreateValidator = (data) =>
   Joi.object()
     .keys({
-      title: Joi.string().min(10).max(80).required(),
-      name: Joi.string().min(2).max(20).required(),
+      title: Joi.string().min(2).max(30).required(),
+      name: Joi.string().min(2).max(16).required(),
       birthday: Joi.number().required(),
-      breed: Joi.string().min(2).max(20).required(),
+      breed: Joi.string().min(2).max(16).required(),
       sex: Joi.string().valid("male", "female", "unknown").default("unknown"),
       category: Joi.string()
         .valid("sell", "in good hands", "lost/found")
         .default("sell"),
-      comments: Joi.string().min(20).max(500),
+      comments: Joi.string().min(8).max(120),
       location: Joi.string().min(2).max(20),
-      price: Joi.number().default(null),
+      price: Joi.number().min(0).default(0),
     })
     .options({ stripUnknown: true })
     .validate(data);
