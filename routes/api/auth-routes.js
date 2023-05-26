@@ -27,4 +27,6 @@ router.patch(
 
 router.get("/user-info", authenticate, ctrl.getUserInfo);
 
+router.get("/user-infoById", ctrl.getUserInfoById);
+
 module.exports = router;
