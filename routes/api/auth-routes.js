@@ -25,8 +25,6 @@ router.patch(
   ctrl.updateSubscription
 );
 
-router.get("/user-info", authenticate, ctrl.getUserInfo);
-
-router.get("/user-infoById/:userId", ctrl.getUserInfoById);
+router.get("/user-info/:id", ctrl.getUserInfo);
 
 module.exports = router;
