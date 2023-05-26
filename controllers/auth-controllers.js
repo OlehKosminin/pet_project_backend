@@ -103,17 +103,9 @@ const updateUserInfo = async (req, res) => {
 };
 
 const getUserInfo = async (req, res) => {
-  const { email } = req.body;
-  const user = await User.findOne({ email });
-  if (!user) {
-    throw HttpError(404);
-  }
-  res.json(user);
-};
-
-const getUserInfoById = async (req, res) => {
-   const { userId } = req.params;
-  if (!userId) throw HttpError(400, "You did not fill user id");
+  console.log("req: ", req.params);
+  const { userId } = req.params;
+  console.log("userId: ", userId);
   const user = await User.findOne({ userId });
   if (!user) {
     throw HttpError(404);
@@ -128,6 +120,4 @@ module.exports = {
   logout: ctrlWrapper(logout),
   updateSubscription: ctrlWrapper(updateUserInfo),
   getUserInfo: ctrlWrapper(getUserInfo),
-  getUserInfoById: ctrlWrapper(getUserInfoById),
 };
-
