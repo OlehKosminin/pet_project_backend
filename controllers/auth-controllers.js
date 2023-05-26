@@ -112,8 +112,9 @@ const getUserInfo = async (req, res) => {
 };
 
 const getUserInfoById = async (req, res) => {
-  const { id } = req.body;
-  const user = await User.findOne({ id });
+   const { userId } = req.params;
+  if (!userId) throw HttpError(400, "You did not fill user id");
+  const user = await User.findOne({ userId });
   if (!user) {
     throw HttpError(404);
   }
