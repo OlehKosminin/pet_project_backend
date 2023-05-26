@@ -111,6 +111,15 @@ const getUserInfo = async (req, res) => {
   res.json(user);
 };
 
+const getUserInfoById = async (req, res) => {
+  const { id } = req.body;
+  const user = await User.findOne({ id });
+  if (!user) {
+    throw HttpError(404);
+  }
+  res.json(user);
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
@@ -118,4 +127,6 @@ module.exports = {
   logout: ctrlWrapper(logout),
   updateSubscription: ctrlWrapper(updateUserInfo),
   getUserInfo: ctrlWrapper(getUserInfo),
+  getUserInfoById: ctrlWrapper(getUserInfoById),
 };
+
